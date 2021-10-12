@@ -2,6 +2,7 @@
 
 ## Tech Stack Used
 * HTML
+* JS
 * [Phaser 3](https://phaser.io/phaser3)
 
 ## Relevant Tutorials
