@@ -63,7 +63,7 @@ class Scene1 extends Phaser.Scene {
 			},
 			loop: false
 		})
-    
+        
 		// Switiching to Scene3
 		//this.scene.start("StartGame");
 
