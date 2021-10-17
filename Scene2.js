@@ -10,7 +10,8 @@ class Scene2 extends Phaser.Scene {
 		// Using config defined in game.js
 		this.config = this.game.config;
 		var config = this.config;
-
+  
+		
 		// Creating a class variable for background named this.background
 		// this.background = this.add.image(0,0,"background");
 		this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
