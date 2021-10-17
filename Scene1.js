@@ -55,9 +55,17 @@ class Scene1 extends Phaser.Scene {
 	create() {
 		// Displaying Text in Scene1
 		this.add.text(20, 20, "Loading game...");
-		
-		// Switiching to Scene2
-		this.scene.start("playGame");
+		this.time.addEvent({
+			delay: 1000,
+			callback: ()=>{
+				
+				this.scene.start("StartGame");
+			},
+			loop: false
+		})
+    
+		// Switiching to Scene3
+		//this.scene.start("StartGame");
 
 		// To create animation (copied from Scene2)
 		this.anims.create({
