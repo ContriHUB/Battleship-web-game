@@ -1,11 +1,17 @@
 // Name of Class same as filename.
+var score =0;
+var highScore =0;
+var highScoreText;
+var scoreText;
+
 class Scene2 extends Phaser.Scene {
 	constructor() {
 		// playGame will be Identifier for this Game
 		super("playGame");
 	}
-
-
+    
+	
+	
 	create() {
 		// Using config defined in game.js
 		this.config = this.game.config;
@@ -126,16 +132,28 @@ class Scene2 extends Phaser.Scene {
 		// Close the path and fill the shape.
 		graphics.closePath();
 		graphics.fillPath();
-
-		// Variable to keep track of the score
-		this.score = 0;
-		// Variable to keep track of the score
+        highScoreText = this.add.text(120, 3, 'HIGHSCORE: ' + highScore, {
+			font: '15px Arial',
+			fill: 'white'
+		});
+	
+	
+	this.score = 0;
+		this.labelScore = this.add.text(10, 3, "SCORE :", 
+		{ font: "15px Arial", fill: "white" });
+		// // Variable to keep track of the score
+		// this.score = 0;
 		
+		
+		
+
         // variable to keep number of lif available
 		this.life=3;
+		// adding high score label
+		//  this.highScoreLabel = this.add.bitmapText(120, 5, "pixelFont", "HIGHSCORE:", 16); 
 		// Adding ScoreLabel
 		
-		this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE:", 16); 		
+		// this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE:", 16); 		
 		// 10, 5 is the position
 		// "pixlefont" is the ID of font we created in Scene1 preload()
 		// "SCORE" is the text to display
@@ -166,7 +184,8 @@ class Scene2 extends Phaser.Scene {
 		this.score += 15;
 		// Adding zero padding to score
 		var scoreFormated = this.zeroPad(this.score, 6);
-		this.scoreLabel.text = `SCORE ${scoreFormated}`; 
+		this.labelScore.text = "SCORE: "+this.score; 
+		// this.scoreLabel.text = `SCORE ${scoreFormated}`; 
 	}
 
 	hurtPlayer(player, enemy) {
@@ -185,7 +204,7 @@ class Scene2 extends Phaser.Scene {
 			})
 			// this.scene.start("StartGame");
 		 }
-
+		
 		// Resetting Enemy Ship Position
 		this.resetShipPos(enemy);
 
@@ -250,7 +269,14 @@ class Scene2 extends Phaser.Scene {
 		this.moveShip(this.ship1, 1);
 		this.moveShip(this.ship2, 2);
 		this.moveShip(this.ship3, 3);
-
+		highScoreText.text = 'HIGHSCORE: ' + localStorage.getItem("highScore");
+  {
+     if (this.score > localStorage.getItem("highScore")) 
+        { 
+            localStorage.setItem("highScore", this.score);
+			
+        }
+    }
 		// For Background texture moving effect
 		this.background.tilePositionY -= 0.5;
 	
@@ -308,12 +334,17 @@ class Scene2 extends Phaser.Scene {
 		ship.x = randomX;
 	}
 
+
+
 	destroyShip(pointer, gameObject) {
 		// pointer: Mouse Pointer (in case we need it, though we won't need it here)
 		// gameObj: Object (ship) in this case.
 		gameObject.setTexture("explosion"); // Texture switched to explosion spritesheet.
 		gameObject.play("explode_anim"); // Play explode animation
 	}
+	// high score update
+	//Highscore CODE
+	
 }
 
 /*
