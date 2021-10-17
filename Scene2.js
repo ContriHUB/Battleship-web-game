@@ -129,9 +129,13 @@ class Scene2 extends Phaser.Scene {
 
 		// Variable to keep track of the score
 		this.score = 0;
-
+		// Variable to keep track of the score
+		
+        // variable to keep number of lif available
+		this.life=3;
 		// Adding ScoreLabel
-		this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE", 16); 
+		
+		this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE:", 16); 		
 		// 10, 5 is the position
 		// "pixlefont" is the ID of font we created in Scene1 preload()
 		// "SCORE" is the text to display
@@ -166,6 +170,22 @@ class Scene2 extends Phaser.Scene {
 	}
 
 	hurtPlayer(player, enemy) {
+		 // decrease life by 1
+		 this.life=this.life-1;
+		 if(this.life==0)
+		 {
+			this.add.bitmapText(50, 50, "pixelFont", "GAME OVER", 40, { fill: '#FFF' }); 
+			this.time.addEvent({
+				delay: 1000,
+				callback: ()=>{
+					
+					this.scene.start("StartGame");
+				},
+				// loop: false
+			})
+			// this.scene.start("StartGame");
+		 }
+
 		// Resetting Enemy Ship Position
 		this.resetShipPos(enemy);
 
@@ -194,6 +214,7 @@ class Scene2 extends Phaser.Scene {
 			callbackScope: this,
 			loop: false
 		});
+		
 	}
 
 	resetPlayer() {
