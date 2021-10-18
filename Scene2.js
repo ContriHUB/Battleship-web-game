@@ -1,3 +1,38 @@
+// Gets highscore from cookie and creates the cookie if does not exist
+function getHighScore(){
+	allCookies = document.cookie;
+	if(allCookies.length > 0){
+		indexStart = allCookies.indexOf("highScore=");
+		if (indexStart!=-1){
+			// 10 is the length of "highScore="
+			indexStart = indexStart + 10 ; 
+			indexEnd = allCookies.indexOf(";",indexStart);
+			if (indexEnd==-1){
+				indexEnd = allCookies.length
+			}
+			if(allCookies.substring(indexStart,indexEnd) === "undefined"){
+				// console.log(0);
+				return 0;
+			}
+			else{
+				// console.log(Number(allCookies.substring(indexStart,indexEnd)));
+				return Number(allCookies.substring(indexStart,indexEnd));
+			}
+		}
+		// Create new cookie if highScore cookie not found and set cookie to 0
+		else{
+			document.cookie = "highScore=0";
+			return 0;
+		}
+	}
+	// Create new cookie if no cookies are found and sethigh score to 0
+	else{
+		document.cookie = "highScore=0";
+		// console.log(0);
+		return 0;
+	}
+}
+
 // Name of Class same as filename.
 class Scene2 extends Phaser.Scene {
 	constructor() {
@@ -133,13 +168,19 @@ class Scene2 extends Phaser.Scene {
 		
         // variable to keep number of lif available
 		this.life=3;
-		// Adding ScoreLabel
+
+		// Creating labels for current score, lives and highscore
 		
-		this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE:", 16); 		
-		// 10, 5 is the position
+		this.currScoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE:", 15);
+		this.lifeLabel = this.add.bitmapText(104, 5, "pixelFont", "LIVES:", 15);
+		this.highScoreLabel = this.add.bitmapText(160, 5, "pixelFont", "HIGHSCORE:", 15); 
+
+		this.lifeLabel.text = `LIVES: ${this.life}`; 
+		this.highScoreLabel.text = `HIGHSCORE: ${getHighScore()}`; 
+		// First 2 arguments specify x and y co-ordinates
 		// "pixlefont" is the ID of font we created in Scene1 preload()
-		// "SCORE" is the text to display
-		// 16 is the font size
+		// Third argument is the text to display
+		// Fourth Argument specifies the font size
 	}
 
 	// Function to Add Zero Padding in front of Score
@@ -166,7 +207,7 @@ class Scene2 extends Phaser.Scene {
 		this.score += 15;
 		// Adding zero padding to score
 		var scoreFormated = this.zeroPad(this.score, 6);
-		this.scoreLabel.text = `SCORE ${scoreFormated}`; 
+		this.currScoreLabel.text = `SCORE: ${scoreFormated}`; 
 	}
 
 	hurtPlayer(player, enemy) {
@@ -186,6 +227,10 @@ class Scene2 extends Phaser.Scene {
 			// this.scene.start("StartGame");
 		 }
 
+		// Modifying label for lives
+		if(this.life>=0){
+			this.lifeLabel.text = `LIVES: ${this.life}`;
+		}
 		// Resetting Enemy Ship Position
 		this.resetShipPos(enemy);
 
@@ -257,6 +302,14 @@ class Scene2 extends Phaser.Scene {
 		// To move Player's Ship.
 		this.movePlayerManager();
 
+		// Updating high score on cookie and label
+		const currScore = getHighScore()
+		if (this.score > currScore) { 
+			console.log(this.score);
+			document.cookie = `highScore=${this.score}`;
+		}
+		this.highScoreLabel.text = `HIGHSCORE: ${getHighScore()}`; 
+
 		// If Spacebar was just pressed down
 		if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
 			// console.log("Fire");
@@ -315,6 +368,7 @@ class Scene2 extends Phaser.Scene {
 		gameObject.play("explode_anim"); // Play explode animation
 	}
 }
+
 
 /*
 	Scenes are controlled by following flow of functions:
